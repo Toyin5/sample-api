@@ -13,7 +13,7 @@ COPY ["SampleAPI.csproj", "."]
 RUN dotnet restore "./././SampleAPI.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build .
+RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
