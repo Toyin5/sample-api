@@ -12,8 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDbContext>(builder.Configuration);
-builder.Configuration.AddEnvironmentVariables();
-//builder.Configuration.AddJsonFile("/etc/secrets/secrets.json", optional: true, reloadOnChange: true);
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<UserRepository>();
 

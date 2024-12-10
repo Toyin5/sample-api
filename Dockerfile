@@ -13,11 +13,11 @@ COPY ["SampleAPI.csproj", "."]
 RUN dotnet restore "./././SampleAPI.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build --secret id=secret,src=/etc/secrets/secrets.json .
+RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build .
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --mount=type=secret,id=secrets.json,dst=/etc/secrets/secrets.json
+RUN dotnet publish "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
