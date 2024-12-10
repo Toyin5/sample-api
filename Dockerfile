@@ -17,7 +17,7 @@ RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false --mount=type=secret,id=secrets.json,dst=/etc/secrets/secrets.json
 
 FROM base AS final
 WORKDIR /app
