@@ -1,0 +1,74 @@
+# .NET build outputs
+bin/
+obj/
+
+# ASP.NET Core
+wwwroot/
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.log.*
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+*.vs/
+
+# Visual Studio
+.vs/
+*.csproj.user
+*.csproj.*
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+*.nupkg*
+.nuget/
+packages/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ASP.NET
+App_Data/
+#appsettings*.json
+
+# Environment files
+.env
+.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Other
+*.swp
+*.swo
+*.tmp
+*.bak
+*.pid
+*.seed
+*.suo
+*.psess
+*.pdb
+*.dbmdl
+*.jfm
+
+# Ignore global gitignore
+.gitignore_global
+
+# user settings
+*.user
+
+**/obj/
+
