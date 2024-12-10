@@ -12,8 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDbContext>(builder.Configuration);
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<UserRepository>();
+
+// Add environment variables
 
 // Test MongoDB Connection on Startup
 try
