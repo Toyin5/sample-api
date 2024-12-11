@@ -60,9 +60,9 @@ app.MapGet("/user", async ([FromQuery] string user, UserRepository userRepositor
 .WithName("Retrieve apikey")
 .WithOpenApi();
 
-app.MapPost("/upload", async ([FromQuery] string user, UserRepository userRepository) =>
+app.MapPost("/upload", async ([FromHeader(Name ="x-api-key")] string apiKey, [FromBody]FileDto file, UserRepository userRepository) =>
 {
-    var result = await userRepository.GetUser(user);
+    var result = await userRepository.UploadAsync(file);
     return result;
 })
 .WithName("Upload")

@@ -90,5 +90,10 @@ namespace SampleAPI.Repositories
             await _apiKeys.FindOneAndDeleteAsync(x => x.Key == apiKey && x.IsActive);
         }
 
+        public async Task<Result> UploadAsync(FileDto fileDto)
+        {
+
+        }
+
     }
 }
