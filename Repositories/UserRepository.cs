@@ -128,7 +128,6 @@ namespace SampleAPI.Repositories
                 fileEntities.Add(fileEntity);  
             }  
 
-            // Bulk insert if there are files to upload  
             if (fileEntities.Any())  
             {  
                 await _files.InsertManyAsync(fileEntities);  
