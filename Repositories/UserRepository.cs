@@ -124,7 +124,6 @@ namespace SampleAPI.Repositories
                     filePath = filePath,  
                     Name = dbApiKey.UserId + DateTime.UtcNow.ToString()
                 };  
-
                 fileEntities.Add(fileEntity);  
             }  
 
