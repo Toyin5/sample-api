@@ -40,7 +40,7 @@ var app = builder.Build();
 
 //app.UseHttpsRedirection();
 
-app.MapPost("/healthCheck", () =>
+app.MapPost("/health", () =>
 {
     return "Server running";
 })
