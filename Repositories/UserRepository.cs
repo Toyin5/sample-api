@@ -110,17 +110,32 @@ namespace SampleAPI.Repositories
                 return Result.Failure("Invalid User");
             }
 
-            File fileEntity = new File
-            {
-                UserId = user.UserId,
-                filePath = fileDto.File,
-                Name = dbApiKey.UserId + DateTime.UtcNow.ToString()
-            };
+            var fileEntities = new List<File>();  
+            foreach (var filePath in fileDto.Files)  
+            {  
+                if (string.IsNullOrWhiteSpace(filePath))  
+                {  
+                    continue; 
+                }  
 
-            await _files.InsertOneAsync(fileEntity);
+                var fileEntity = new File  
+                {  
+                    UserId = user.UserId,  
+                    filePath = filePath,  
+                    Name = dbApiKey.UserId + DateTime.UtcNow.ToString()
+                };  
 
-            return Result.Success("File uploaded");
-        }
+                fileEntities.Add(fileEntity);  
+            }  
 
+            // Bulk insert if there are files to upload  
+            if (fileEntities.Any())  
+            {  
+                await _files.InsertManyAsync(fileEntities);  
+                return Result.Success($"{fileEntities.Count} file(s) uploaded successfully");  
+            }  
+
+            return Result.Failure("No valid files to upload");  
+        }  
     }
 }

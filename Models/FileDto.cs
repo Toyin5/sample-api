@@ -2,6 +2,6 @@
 {
     public class FileDto
     {
-        public required string File { get; set; }
+        public List<string> Files { get; set; }
     }
 }
