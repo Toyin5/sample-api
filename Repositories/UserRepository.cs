@@ -4,6 +4,7 @@ using SampleAPI.Models;
 using SampleAPI.Persistence;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using File = SampleAPI.Entities.File;
 
 namespace SampleAPI.Repositories
 {
@@ -11,11 +12,13 @@ namespace SampleAPI.Repositories
     {
         private readonly IMongoCollection<User> _users;
         private readonly IMongoCollection<ApiKey> _apiKeys;
+        private readonly IMongoCollection<File> _files;
 
         public UserRepository(MongoDbContext dbContext)
         {
             _users = dbContext.GetCollection<User>("Users");
             _apiKeys = dbContext.GetCollection<ApiKey>("ApiKeys");
+            _files = dbContext.GetCollection<File>("files");
         }
 
         public async Task<Result> CreateUser(UserDto user)
@@ -90,9 +93,33 @@ namespace SampleAPI.Repositories
             await _apiKeys.FindOneAndDeleteAsync(x => x.Key == apiKey && x.IsActive);
         }
 
-        public async Task<Result> UploadAsync(FileDto fileDto)
+        public async Task<Result> UploadAsync(string apiKey, FileDto fileDto)
         {
+            var filter = Builders<ApiKey>.Filter.Eq(i => i.Key, apiKey);
+            ApiKey? dbApiKey = await _apiKeys.Find(filter).FirstOrDefaultAsync();
+            if (dbApiKey == null)
+            {
+                return Result.Failure("Invalid API key");
+            }
 
+
+            var userFilter = Builders<User>.Filter.Eq(i => i.UserId, dbApiKey.UserId);
+            User user = await _users.Find(userFilter).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return Result.Failure("Invalid User");
+            }
+
+            File fileEntity = new File
+            {
+                UserId = user.UserId,
+                filePath = fileDto.File,
+                Name = dbApiKey.UserId + DateTime.UtcNow.ToString()
+            };
+
+            await _files.InsertOneAsync(fileEntity);
+
+            return Result.Success("File uploaded");
         }
 
     }
