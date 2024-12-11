@@ -1,25 +1,33 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Use the .NET SDK image to build the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+# Set the working directory
 WORKDIR /app
+
+# Copy the project files
+COPY *.csproj ./
+
+# Restore dependencies
+RUN dotnet restore
+
+# Copy the rest of the application files
+COPY . ./
+
+# Build the application
+RUN dotnet publish -c Release -o /out
+
+# Use a runtime-only image for the final stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the built application from the build stage
+COPY --from=build /out ./
+
+# Expose the port the app runs on
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["SampleAPI.csproj", "."]
-RUN dotnet restore "./././SampleAPI.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SampleAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Set the entry point to run the application
 ENTRYPOINT ["dotnet", "SampleAPI.dll"]
