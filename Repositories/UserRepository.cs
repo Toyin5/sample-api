@@ -133,7 +133,7 @@ namespace SampleAPI.Repositories
                 return Result.Success($"{fileEntities.Count} file(s) uploaded successfully");  
             }  
 
-            return Result.Failure("No valid files to upload");  
+            return Result.Success("No valid files to upload");  
         }  
     }
 }
