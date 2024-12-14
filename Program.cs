@@ -40,7 +40,12 @@ var app = builder.Build();
 
 //app.UseHttpsRedirection();
 
-
+app.MapPost("/health", () =>
+{
+    return "Server running";
+})
+.WithName("healthCheck")
+.WithOpenApi();
 
 app.MapPost("/register", async ([FromBody]UserDto user, UserRepository userRepository) =>
 {
